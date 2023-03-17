@@ -1,7 +1,7 @@
 const axiosAuth = require('./axios');
-const token = require('./token');
+const getToken = require('./token');
 
 module.exports = {
   axiosAuth,
-  token
+  getToken
 };
