@@ -1,5 +1,10 @@
 # Apigee Auth JWT
 
+[![NPM Version](https://img.shields.io/npm/v/apigee-auth-jwt.svg)](https://npmjs.org/package/apigee-auth-jwt)
+[![NPM Downloads](https://img.shields.io/npm/dm/apigee-auth-jwt.svg)](https://npmjs.org/package/apigee-auth-jwt)
+[![GitHub issues](https://img.shields.io/github/issues/juninmd/apigee-auth-jwt.svg)](https://github.com/juninmd/apigee-auth-jwt/issues)
+[![GitHub forks](https://img.shields.io/github/forks/juninmd/apigee-auth-jwt.svg)](https://github.com/juninmd/apigee-auth-jwt/network)
+
 ## Description
 
 The apigee-auth-jwt library provides a simple and efficient way to generate authentication tokens and add authorization headers for requests to Apigee.
