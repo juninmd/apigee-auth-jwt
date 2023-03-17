@@ -2,7 +2,8 @@
 
 ## Description
 
-The apigee-auth-jwt library provides a simple way to generate authentication tokens and add authorization headers for requests to Apigee.
+The apigee-auth-jwt library provides a simple and efficient way to generate authentication tokens and add authorization headers for requests to Apigee.
+It also includes a cache system to improve performance by reducing the number of token requests made to the server.
 
 ## Installation
 
