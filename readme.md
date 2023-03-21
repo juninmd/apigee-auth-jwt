@@ -26,7 +26,7 @@ To generate a token, use the getToken function:
 
 ```js
 const { getToken }  = require('apigee-auth-jwt');
-const token = await getToken('apigee.com','client_key','client_secret');
+const token = await getToken('https://myhost.com','client_key','client_secret');
 ```
 
 ## Generate Axios Client with Authorization Header
@@ -35,7 +35,7 @@ To generate an Axios client with the authorization header, use the axiosAuth fun
 
 ```js
 const { axiosAuth }  = require('apigee-auth-jwt');
-const axios = await axiosAuth('apigee.com','client_key','client_secret');
+const axios = await axiosAuth('https://myhost.com','client_key','client_secret');
 
 axios(config)
 .then(function (response) {

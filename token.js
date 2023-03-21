@@ -24,11 +24,11 @@ async function getToken(host, clientId, clientSecret) {
   });
 
   const config = {
-    baseUrl: host,
+    baseURL: host,
     url: '/oauth/client_credential/accesstoken',
     method: 'post',
     data: body,
-    query: {
+    params: {
       grant_type: 'client_credentials'
     },
     headers: {
@@ -37,7 +37,7 @@ async function getToken(host, clientId, clientSecret) {
   };
 
   const { data: { access_token, expires_in } } = await axios.request(config);
-  cache.set('access-token-apigee', access_token, expires_in - 60);
+  cache.set('access-token-apigee', access_token, Number(expires_in) - 60);
   return access_token;
 }
 
