@@ -1,6 +1,6 @@
 {
   "name": "apigee-auth-jwt",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Generate jwt token for your apps of apigee",
   "author": "Antonio Carlos",
   "main": "index.js",
