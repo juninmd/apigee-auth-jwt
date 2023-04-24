@@ -42,7 +42,7 @@ describe('getToken', () => {
     expect(axios.request).toHaveBeenCalledTimes(1);
     expect(axios.request).toHaveBeenCalledWith({
       baseURL: host,
-      url: '/oauth/client_credential/accesstoken',
+      url: '/oauth/jwt/client_credential/accesstoken',
       method: 'post',
       data: 'client_id=client-id&client_secret=client-secret',
       params: {

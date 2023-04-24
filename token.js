@@ -25,7 +25,7 @@ async function getToken(host, clientId, clientSecret) {
 
   const config = {
     baseURL: host,
-    url: '/oauth/client_credential/accesstoken',
+    url: '/oauth/jwt/client_credential/accesstoken',
     method: 'post',
     data: body,
     params: {
