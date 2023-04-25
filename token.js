@@ -1,5 +1,5 @@
 // @ts-check
-const axios = require('axios');
+const { default: axios } = require('axios');
 const qs = require('qs');
 
 const cache = require('./cache');
