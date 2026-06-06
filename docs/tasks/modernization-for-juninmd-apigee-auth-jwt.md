@@ -16,7 +16,7 @@ Foram tomadas as seguintes decisões de arquitetura durante a modernização:
 ## Impactos e riscos
 Os impactos e riscos da modernização incluem:
 - Risco de introdução de bugs: A modernização pode introduzir novos bugs ou erros no código.
-- Risco de incompatibilidade: A modernização pode causar incompatibilidade com versões anteriores do código ou com dependças.
+- Risco de incompatibilidade: A modernização pode causar incompatibilidade com versões anteriores do código ou com dependências.
 
 ## Como validar
 Para validar a modernização, foram realizados os seguintes passos:
@@ -31,5 +31,5 @@ Os próximos passos incluem:
 - Continuar a manutenção e a atualização do código para garantir que ele permaneça atualizado e seguro.
 - Monitorar o código para detectar e corrigir qualquer bug ou erro que possa surgir.
 
-## Evidência visuais
+## Evidências visuais
 Não foi possível capturar uma imagem da UI da aplicação, pois a aplicação não estava em execução.
