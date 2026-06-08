@@ -1,0 +1,17 @@
+{
+  "id": "b89c452d5b12ea66",
+  "title": "Security Hardening for juninmd/apigee-auth-jwt",
+  "status": "backlog",
+  "branchName": "vibe-code/832d12cd/security-hardening-for-juninmd-apigee-au",
+  "baseBranch": "master",
+  "parentTaskId": null,
+  "tags": [
+    "github-assistance",
+    "opencode"
+  ],
+  "goal": null,
+  "desiredOutcome": null,
+  "runId": "bd005b2908b33a29",
+  "engine": "opencode",
+  "matchedSkills": []
+}
