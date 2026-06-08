@@ -10,9 +10,11 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@octokit/rest": "^22.0.1",
     "axios": "^1.17.0",
     "cors": "^2.8.6",
     "eslint": "^10.4.1",
+    "gh": "^2.8.9",
     "helmet": "^8.2.0",
     "jsonwebtoken": "^9.0.3",
     "node-cache": "^5.1.2",
