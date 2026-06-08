@@ -1,55 +1,43 @@
-```markdown
-# Apigee-Auth-JWT
+## CI/CD Setup
 
-## Description
+This repository uses GitHub Actions for CI/CD.
 
-Generate the JWT token for your apps of Apigee.
+### Workflow File
 
-## Installation
+The workflow file is located at `.github/workflows/ci-cd.yml`.
 
-1.  **Dependencies:**
-    *   `npm install axios`
-    *   `npm install axios --save`
-    *   `npm install cache`
-    *   `npm install cache --save`
-    *   `npm install jest`
-    *   `npm install --save-dev @types/axios`
-    *   `npm install --save-dev @types/axios/node`
+### Pipeline Stages
 
-2.  **Initialize:**
-    ```bash
-    npm init -y
-    ```
+The pipeline consists of the following stages:
 
-3.  **Install dependencies:**
-    ```bash
-    npm install axios
-    npm install axios --save
-    npm install cache
-    npm install cache --save
-    npm install jest
-    npm install --save-dev @types/axios
-    npm install --save-dev @types/axios/node
-    ```
+1. **Build**: Builds the application using the `build` script.
 
-4.  **Configure:**
-    *   Set `APP_NAME` environment variable: `apigee-auth-jwt`
-    *   Ensure your Apigee application is correctly configured to use JWT authentication.  Refer to the official Apigee documentation for detailed setup instructions.
+2. **Test**: Runs the unit tests and integration tests using the `test` script.
 
-## Usage
+3. **Deploy**: Deploys the application to the production environment using the `deploy` script.
 
-1.  **Generate Token:**
-    ```bash
-    npm run generate-jwt
-    ```
+### Environment Variables
 
-2.  **Token Validation:**
-    *   Use the `apigee-auth-jwt` library to verify the generated token against your Apigee application. The library provides a function to verify the token.  Consult the library documentation for the proper usage.
+The following environment variables are used in the pipeline:
 
-3.  **Use Token:**
-    *   Your application can use the generated JWT token in subsequent API calls to authenticate.
+* `GITHUB_TOKEN`: The GitHub token used for authentication.
 
-4.  **Test Token:**
-    *   Run the `token.test.js` unit test file to verify the token generation process and functionality.
+* `CI_CD_ENV`: The environment variable that determines the deployment environment (e.g., production, staging).
 
-```
+### Secrets
+
+The following secrets are used in the pipeline:
+
+* `GITHUB_TOKEN`: The GitHub token used for authentication.
+
+* `CI_CD_ENV`: The environment variable that determines the deployment environment (e.g., production, staging).
+
+### Dependencies
+
+The pipeline uses the following dependencies:
+
+* `github-actions`: The GitHub Actions workflow runner.
+
+* `docker`: The Docker containerization platform.
+
+* `kubectl`: The Kubernetes command-line tool.
