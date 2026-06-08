@@ -1,0 +1,1 @@
+{"root": true, "env": { "node": true }, "parserOptions": { "ecmaVersion": 2022 }, "rules": { "no-console": "error" }, "extends": ["plugin:node/recommended"]}
