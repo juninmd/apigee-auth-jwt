@@ -1,0 +1,2 @@
+# Evidências visuais
+No screenshot was taken as the application is not running.
