@@ -1,43 +1,19 @@
-## CI/CD Setup
+CI/CD Pipeline for juninmd/apigee-auth-jwt
+=============================================
 
-This repository uses GitHub Actions for CI/CD.
+[![Build Status](https://github.com/juninmd/apigee-auth-jwt/actions/workflows/ci.yml/badge.svg)](https://github.com/juninmd/apigee-auth-jwt/actions/workflows/ci.yml)
 
-### Workflow File
+## Introduction
+This repository contains the CI/CD pipeline for the juninmd/apigee-auth-jwt project.
 
-The workflow file is located at `.github/workflows/ci-cd.yml`.
+## Pipeline Overview
+The pipeline is based on GitHub Actions and includes the following stages:
+- Linting and testing
+- Building
+- Deployment
 
-### Pipeline Stages
+## Usage
+To use the pipeline, simply push your changes to the repository. The pipeline will automatically trigger and run the specified jobs.
 
-The pipeline consists of the following stages:
-
-1. **Build**: Builds the application using the `build` script.
-
-2. **Test**: Runs the unit tests and integration tests using the `test` script.
-
-3. **Deploy**: Deploys the application to the production environment using the `deploy` script.
-
-### Environment Variables
-
-The following environment variables are used in the pipeline:
-
-* `GITHUB_TOKEN`: The GitHub token used for authentication.
-
-* `CI_CD_ENV`: The environment variable that determines the deployment environment (e.g., production, staging).
-
-### Secrets
-
-The following secrets are used in the pipeline:
-
-* `GITHUB_TOKEN`: The GitHub token used for authentication.
-
-* `CI_CD_ENV`: The environment variable that determines the deployment environment (e.g., production, staging).
-
-### Dependencies
-
-The pipeline uses the following dependencies:
-
-* `github-actions`: The GitHub Actions workflow runner.
-
-* `docker`: The Docker containerization platform.
-
-* `kubectl`: The Kubernetes command-line tool.
+## Contributing
+For more information on contributing to this repository, please see the [CONTRIBUTING.md](CONTRIBUTING.md) file.
