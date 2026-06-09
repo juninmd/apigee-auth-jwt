@@ -1,0 +1,17 @@
+{
+  "id": "dd4a1d31facc06d3",
+  "title": "CI/CD Pipeline for juninmd/apigee-auth-jwt",
+  "status": "backlog",
+  "branchName": "vibe-code/499dad03/ci-cd-pipeline-for-juninmd-apigee-auth-j",
+  "baseBranch": "master",
+  "parentTaskId": null,
+  "tags": [
+    "github-assistance",
+    "opencode"
+  ],
+  "goal": null,
+  "desiredOutcome": null,
+  "runId": "9de9e5b44040673f",
+  "engine": "opencode",
+  "matchedSkills": []
+}
