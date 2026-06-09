@@ -14,3 +14,12 @@ jobs:
         run: npm install
       - name: Run tests
         run: npm test
+      - name: Deploy to production
+        uses: easingthemes/ssh-deploy@v2
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: '-avz --delete'
+          SOURCE: '.'
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          REMOTE_DIR: ${{ secrets.REMOTE_DIR }}
