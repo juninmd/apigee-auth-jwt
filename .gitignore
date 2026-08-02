@@ -1,4 +1,31 @@
+# Dependencies
 node_modules/*
-yarn.lock
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+.env.*
+*.key
+*.pem
+*.p12
+*.p8
+*.cer
+*.crt
+secrets/
+config/secrets.yml
+!.env.example
+
+# Logs (may contain sensitive data)
+*.log
+npm-debug.log*
+bun-debug.log*
+yarn-error.log*
+
+# Coverage
 coverage
+
+# Editors / OS
 .vscode
+.idea
+.DS_Store
