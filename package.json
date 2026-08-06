@@ -10,9 +10,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.27.2",
+    "axios": "^1.19.0",
     "node-cache": "^5.1.2",
-    "qs": "^6.11.1"
+    "qs": "^6.15.3"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "devDependencies": {
     "@types/jest": "^29.5.0",
@@ -25,6 +28,7 @@
     "axios.js",
     "cache.js",
     "index.js",
+    "security.js",
     "token.js"
   ],
   "repository": {

@@ -2,6 +2,10 @@
 const { default: axios } = require('axios');
 
 const getToken = require('./token');
+const {
+  validateCredentials,
+  validateHost
+} = require('./security');
 /**
  *
  * @param {String} host
@@ -10,6 +14,9 @@ const getToken = require('./token');
  * @returns Bearer Token
  */
 async function axiosAuth(host, clientId, clientSecret) {
+  validateHost(host);
+  validateCredentials(clientId, clientSecret);
+
   const accessToken = await getToken(host, clientId, clientSecret);
   const instance = axios.create({
     headers: {
