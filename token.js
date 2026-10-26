@@ -1,8 +1,18 @@
 // @ts-check
+const { createHash } = require('crypto');
 const { default: axios } = require('axios');
 const qs = require('qs');
 
 const cache = require('./cache');
+
+/**
+ * One cache entry per host and client id, so tokens never leak across tenants.
+ * The client id is hashed so it does not sit in clear in the cache keys.
+ * @param {String} host
+ * @param {String} clientId
+ */
+const cacheKeyFor = (host, clientId) =>
+  `access-token-apigee:${host}:${createHash('sha256').update(clientId).digest('hex')}`;
 
 /**
  *
@@ -12,7 +22,8 @@ const cache = require('./cache');
  * @returns Bearer Token
  */
 async function getToken(host, clientId, clientSecret) {
-  let accessToken = cache.get('access-token-apigee');
+  const cacheKey = cacheKeyFor(host, clientId);
+  let accessToken = cache.get(cacheKey);
 
   if (accessToken) {
     return accessToken;
@@ -34,10 +45,13 @@ async function getToken(host, clientId, clientSecret) {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
+    // Bounded wait, and no redirects: the body carries the client secret.
+    timeout: 10000,
+    maxRedirects: 0,
   };
 
   const { data: { access_token, expires_in } } = await axios.request(config);
-  cache.set('access-token-apigee', access_token, Number(expires_in) - 60);
+  cache.set(cacheKey, access_token, Number(expires_in) - 60);
   return access_token;
 }
 
