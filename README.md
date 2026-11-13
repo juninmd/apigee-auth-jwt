@@ -1,5 +1,9 @@
 # apigee-auth-jwt
 
+<p align="center">
+  <img src="docs/readme/hero.png" alt="Illustrative banner for apigee-auth-jwt (mockup with fictitious data)" width="100%">
+</p>
+
 **Fetches an Apigee OAuth access token with the client-credentials grant, keeps it in memory and reuses it until it is about to expire.**
 
 A small Node.js helper with two entry points: `getToken()` returns the token string, and `axiosAuth()` returns an axios instance that already sends `Authorization: Bearer <token>`. The token stays in process memory, and repeat calls hit the cache instead of the token endpoint.
@@ -152,6 +156,24 @@ npm run test:watch
 | `dependabot-auto-merge.yml` | `pull_request_target` | Auto-merge for Dependabot PRs when all checks pass |
 
 The repository has no release or publish workflow; merging to `master` does not publish a new npm version.
+
+## Screenshots
+
+> [!NOTE]
+> **Illustrative mockups.** The screens below were rendered from HTML with fictitious data (Playwright). They are not captures of a real installation.
+
+<p align="center">
+  <img src="docs/readme/usage.png" alt="Token cache in practice — illustrative mockup with fictitious data" width="100%">
+  <br>
+  <sub>Token cache in practice — fictitious data.</sub>
+</p>
+
+<p align="center">
+  <img src="docs/readme/flow.png" alt="Token lifecycle — illustrative mockup with fictitious data" width="100%">
+  <br>
+  <sub>Token lifecycle — fictitious data.</sub>
+</p>
+
 
 ## Limitations
 
