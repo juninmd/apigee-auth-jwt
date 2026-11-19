@@ -39,6 +39,7 @@ function isPrivateIPv4(ip) {
   return a === 10 ||
     a === 127 ||
     a === 0 ||
+    (a === 100 && b >= 64 && b <= 127) ||
     (a === 169 && b === 254) ||
     (a === 172 && b >= 16 && b <= 31) ||
     (a === 192 && b === 168);
@@ -57,6 +58,13 @@ function isInternalAddress(hostname) {
   if (v4mapped) {
     return isPrivateIPv4(v4mapped[1]);
   }
+  // WHATWG URL normalizes [::ffff:127.0.0.1] to ::ffff:7f00:1, so the hex form is what reaches us.
+  const v4mappedHex = host.match(/^::ffff:([0-9a-f]{1,4}):([0-9a-f]{1,4})$/);
+  if (v4mappedHex) {
+    const high = parseInt(v4mappedHex[1], 16);
+    const low = parseInt(v4mappedHex[2], 16);
+    return isPrivateIPv4(`${high >> 8}.${high & 0xff}.${low >> 8}.${low & 0xff}`);
+  }
 
   const version = net.isIP(host);
   if (version === 4) {
@@ -66,8 +74,9 @@ function isInternalAddress(hostname) {
     if (host === '::' || host === '::1') {
       return true;
     }
-    const firstGroup = host.split(':')[0];
-    return /^f[cd]$/.test(firstGroup) || /^fe[89ab]$/.test(firstGroup);
+    const first = parseInt(host.split(':')[0] || '0', 16);
+    // fc00::/7 (unique local) and fe80::/10 (link-local)
+    return (first & 0xfe00) === 0xfc00 || (first & 0xffc0) === 0xfe80;
   }
   return false;
 }
