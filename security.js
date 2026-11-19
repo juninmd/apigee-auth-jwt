@@ -14,7 +14,7 @@ class RateLimiter {
   tryConsume(key) {
     const now = Date.now();
     const entry = this.hits.get(key);
-    if (!entry || now - entry.resetAt >= this.windowMs) {
+    if (!entry || now >= entry.resetAt) {
       this.hits.set(key, { count: 1, resetAt: now + this.windowMs });
       return true;
     }
