@@ -2,6 +2,7 @@
 const { default: axios } = require('axios');
 const cache = require('./cache');
 const getToken = require('./token');
+const { cacheKey } = getToken;
 
 jest.mock('axios');
 
@@ -17,7 +18,7 @@ describe('getToken', () => {
 
   it('should return the access token from cache if it exists', async () => {
     const accessToken = 'mock-access-token';
-    cache.set('access-token-apigee', accessToken);
+    cache.set(cacheKey(host, clientId, clientSecret), accessToken);
 
     const result = await getToken(host, clientId, clientSecret);
 
@@ -44,6 +45,7 @@ describe('getToken', () => {
       baseURL: host,
       url: '/oauth/jwt/client_credential/accesstoken',
       method: 'post',
+      timeout: 10000,
       data: 'client_id=client-id&client_secret=client-secret',
       params: {
         grant_type: 'client_credentials'
@@ -52,7 +54,7 @@ describe('getToken', () => {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
-    expect(cache.get('access-token-apigee')).toEqual(accessToken);
+    expect(cache.get(cacheKey(host, clientId, clientSecret))).toEqual(accessToken);
   });
 
   it('should throw an error if the token endpoint returns an error', async () => {
@@ -60,6 +62,16 @@ describe('getToken', () => {
     axios.request.mockRejectedValue(new Error(errorMessage));
 
     await expect(getToken(host, clientId, clientSecret)).rejects.toThrow(errorMessage);
-    expect(cache.get('access-token-apigee')).toBeUndefined();
+    expect(cache.get(cacheKey(host, clientId, clientSecret))).toBeUndefined();
+  });
+
+  it('should not reuse a cached token for different credentials or another host', async () => {
+    cache.set(cacheKey(host, clientId, clientSecret), 'token-a');
+    axios.request.mockResolvedValue({ data: { access_token: 'token-b', expires_in: 3600 } });
+
+    await expect(getToken(host, 'other-client', clientSecret)).resolves.toBe('token-b');
+    await expect(getToken('https://other.example.com', clientId, clientSecret)).resolves.toBe('token-b');
+    await expect(getToken(host, clientId, clientSecret)).resolves.toBe('token-a');
+    expect(axios.request).toHaveBeenCalledTimes(2);
   });
 });
