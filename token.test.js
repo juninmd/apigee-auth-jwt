@@ -74,4 +74,25 @@ describe('getToken', () => {
     await expect(getToken(host, clientId, clientSecret)).resolves.toBe('token-a');
     expect(axios.request).toHaveBeenCalledTimes(2);
   });
+
+  it('should share one token request between concurrent callers on a cold cache', async () => {
+    getToken.tokenRateLimiter.reset();
+    let resolve;
+    axios.request.mockReturnValue(new Promise((r) => { resolve = r; }));
+
+    const calls = Array.from({ length: 12 }, () => getToken(host, clientId, clientSecret));
+    resolve({ data: { access_token: 'shared-token', expires_in: 3600 } });
+
+    await expect(Promise.all(calls)).resolves.toEqual(Array(12).fill('shared-token'));
+    expect(axios.request).toHaveBeenCalledTimes(1);
+  });
+
+  it('should let a new request through after a shared one fails', async () => {
+    getToken.tokenRateLimiter.reset();
+    axios.request.mockRejectedValueOnce(new Error('boom'));
+    axios.request.mockResolvedValueOnce({ data: { access_token: 'retry-token', expires_in: 3600 } });
+
+    await expect(getToken(host, clientId, clientSecret)).rejects.toThrow('boom');
+    await expect(getToken(host, clientId, clientSecret)).resolves.toBe('retry-token');
+  });
 });
