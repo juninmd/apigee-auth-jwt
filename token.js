@@ -15,6 +15,8 @@ const tokenRateLimiter = new RateLimiter();
 const CACHE_KEY_PREFIX = 'access-token-apigee';
 const DEFAULT_TTL_SECONDS = 3600;
 const REQUEST_TIMEOUT_MS = 10 * 1000;
+/** @type {Map<string, Promise<string>>} */
+const inFlight = new Map();
 
 // One token per host + credentials; the secret only enters the key as a hash.
 function cacheKey(host, clientId, clientSecret) {
@@ -42,6 +44,22 @@ async function getToken(host, clientId, clientSecret) {
     return accessToken;
   }
 
+  // Concurrent callers on a cold cache share one request instead of each
+  // spending rate-limit budget (and the 11th failing with 429).
+  const pending = inFlight.get(key);
+  if (pending) {
+    return pending;
+  }
+  const request = requestToken(host, clientId, clientSecret, key);
+  inFlight.set(key, request);
+  try {
+    return await request;
+  } finally {
+    inFlight.delete(key);
+  }
+}
+
+async function requestToken(host, clientId, clientSecret, key) {
   if (!tokenRateLimiter.tryConsume(host)) {
     const error = new Error('Too many token requests. Please retry later.');
     error.statusCode = 429;
