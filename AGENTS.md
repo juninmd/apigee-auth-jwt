@@ -1,64 +1,40 @@
-```markdown
-# AGENTS.md File Guidelines
+# AGENTS.md
 
-These guidelines are designed to ensure the consistent, high-quality development of AGENTS.md, a repository for AI coding agents. Adherence to these principles is mandatory for all development activities.
+`apigee-auth-jwt` is a small Node.js library. It fetches an Apigee OAuth access token with the client-credentials grant, keeps it in memory, and reuses it until it is about to expire.
 
-## 1. DRY (Don't Repeat Yourself)
+## Stack
+- Node.js >= 18 (CommonJS entry, `index.js`), axios, node-cache, qs
+- Tests: Jest 30 with ts-jest and TypeScript types in devDependencies
+- Published to npm as `apigee-auth-jwt`; `files` in `package.json` limits the package to the runtime modules
 
-*   **Code Reuse:**  Strive for reusable components and functions across multiple agents.  Avoid creating duplicated logic.
-*   **Single Responsibility Principle:** Each agent should have a clearly defined, focused purpose.  Changes should not inadvertently impact other agents.
-*   **Abstraction:**  Utilize abstract classes or interfaces where appropriate to promote modularity and reduce code duplication.
+## Commands
+- Install: `npm ci` (or `pnpm install --frozen-lockfile`)
+- Tests with coverage: `npm test` (runs `jest --coverage`)
+- Watch mode: `npm run test:watch`
 
-## 2. KISS (Keep It Simple, Stupid)
+## Structure
+- `index.js`: public API (`getToken()`, `axiosAuth()`)
+- `token.js`: token request and expiry handling
+- `cache.js`: in-memory token cache (node-cache)
+- `axios.js`: axios instance with the `Authorization` header
+- `security.js`: host and credential validation, internal-address blocking
+- `*.test.js`: Jest suites next to each module
+- `docs/`: README images and `docs/tasks/`
+- `.trivyignore`: CVE baseline for the SAST gate
 
-*   **Simple Solutions:** Favor straightforward, easily understandable solutions over complex ones.
-*   **Minimalism:**  Avoid unnecessary complexity in design and implementation.  Keep code concise and focused.
-*   **Readability:** Prioritize code that is easily readable and understandable, even by someone unfamiliar with the codebase.
+## Conventions
+- Keep each file at or under 180 lines. Current maximum: `security.js` at 143.
+- Aim for 80% test coverage. The Jest config does not enforce a threshold, so check the `--coverage` report yourself.
+- Validate host and credentials before any network call.
+- Do not add features beyond the current need.
+- Do not commit `.env`, keys, certificates or client secrets. `.gitignore` blocks them.
+- Changes go through code review before merge.
 
-## 3. SOLID Principles
-
-*   **Single Responsibility:** Each class, function, or module should have one primary responsibility.
-*   **Open/Closed Principle:**  The system should be extensible without modifying the existing code.  New functionality should be added through new classes/functions, not through modification of the core code.
-*   **Liskov Substitution Principle:**  Subclasses should be substitutable for their base classes without altering the correctness of the system.
-*   **Interface Segregation Principle:** Clients shouldn't be forced to implement interfaces they don't use.
-*   **Dependency Inversion Principle:** Interfaces should be used as a substitute for concrete classes.
-
-## 4. YAGNI (You Aren't Gonna Need It)
-
-*   **Avoid Unnecessary Features:**  Do not implement features that are not currently required or are unlikely to be needed in the future.
-*   **Focus on Core Functionality:**  Concentrate on providing the essential functionality for each agent.  Future enhancements should be considered carefully.
-
-## 5. Development Process & Best Practices
-
-*   **Code Style:**  Adhere to a consistent code style guide (e.g., PEP 8 for Python).  Use a linter to enforce style automatically.
-*   **Documentation:**  Write clear and concise documentation for all functions, classes, and modules.  Use docstrings effectively.
-*   **Testing:**  All development MUST be productive.  Tests should be thorough, covering all key functionalities and edge cases.
-*   **Version Control:**  Use a version control system (e.g., Git) with clear branching strategies.
-*   **Code Review:**  All changes must undergo a code review before being merged.
-*   **Error Handling:**  Implement proper error handling and logging to facilitate debugging and monitoring.
-*   **Security Considerations:** Implement basic security measures such as input validation and secure coding practices.
-
-## 6. File Length Constraints
-
-*   **Maximum Code:** 180 lines of code per file.
-*   **Lines per File:**  Maximum 180 lines of code for each file.
-
-## 7. Test Coverage Requirements
-
-*   **Minimum:** 80% test coverage across all files.  This requires automated test suites for critical functionalities.
-
-## 8. Data Structures & Algorithms
-
-*   Utilize appropriate data structures for efficient data manipulation.  Choose algorithms based on performance requirements.  Avoid overly complex data structures unless necessary.
-
-## 9. Framework & Libraries
-
-*   Utilize established AI frameworks (e.g., TensorFlow, PyTorch) where appropriate.  Ensure compatibility with existing code.  Use libraries for essential tasks.
-
-## 10.  Comments
-
-*   Write concise, informative comments explaining complex logic or design decisions.  Ensure comments are clear and directly related to the code.
-```
+## Gotchas
+- Two lockfiles are committed: `package-lock.json` and `pnpm-lock.yaml`. `packageManager` pins pnpm@10.34.5. Do not hand-edit either; regenerate with the package manager you use.
+- `.trivyignore` holds the known-CVE baseline. New vulnerabilities fail the SAST gate; add an entry only with a reason.
+- `docs/tasks/modernization-for-juninmd-apigee-auth-jwt.md` describes a TypeScript migration, but the source files are still `.js`. Treat it as historical, not as current state.
+- CI calls reusable workflows from `juninmd/base-actions` (`validate`, `sast`).
 
 <!-- base-actions-main-policy -->
 ## GitHub Actions — padrão obrigatório (@main)
