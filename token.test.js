@@ -95,4 +95,44 @@ describe('getToken', () => {
     await expect(getToken(host, clientId, clientSecret)).rejects.toThrow('boom');
     await expect(getToken(host, clientId, clientSecret)).resolves.toBe('retry-token');
   });
+  describe('cache lifetime from expires_in', () => {
+    const key = () => cacheKey(host, clientId, clientSecret);
+    const ttlSeconds = () => Math.round((cache.getTtl(key()) - Date.now()) / 1000);
+
+    beforeEach(() => getToken.tokenRateLimiter.reset());
+
+    it('never keeps a short-lived token cached past its own expiry', async () => {
+      axios.request.mockResolvedValue({ data: { access_token: 'short', expires_in: 30 } });
+
+      await getToken(host, clientId, clientSecret);
+
+      expect(ttlSeconds()).toBeGreaterThan(0);
+      expect(ttlSeconds()).toBeLessThan(30);
+    });
+
+    it('does not cache a token that is already expired', async () => {
+      axios.request.mockResolvedValueOnce({ data: { access_token: 'dead', expires_in: 0 } });
+      axios.request.mockResolvedValueOnce({ data: { access_token: 'fresh', expires_in: 3600 } });
+
+      await expect(getToken(host, clientId, clientSecret)).resolves.toBe('dead');
+      expect(cache.get(key())).toBeUndefined();
+      await expect(getToken(host, clientId, clientSecret)).resolves.toBe('fresh');
+    });
+
+    it('keeps the 60 s safety margin for normal lifetimes', async () => {
+      axios.request.mockResolvedValue({ data: { access_token: 'hour', expires_in: 3600 } });
+
+      await getToken(host, clientId, clientSecret);
+
+      expect(ttlSeconds()).toBe(3540);
+    });
+
+    it('falls back to the default lifetime when expires_in is missing', async () => {
+      axios.request.mockResolvedValue({ data: { access_token: 'no-exp' } });
+
+      await getToken(host, clientId, clientSecret);
+
+      expect(ttlSeconds()).toBe(3540);
+    });
+  });
 });

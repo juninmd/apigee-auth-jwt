@@ -99,10 +99,20 @@ async function requestToken(host, clientId, clientSecret, key) {
     throw error;
   }
 
-  const expiresIn = Number(data.expires_in);
-  const ttl = Number.isFinite(expiresIn) && expiresIn > 60 ? expiresIn - 60 : DEFAULT_TTL_SECONDS - 60;
-  cache.set(key, data.access_token, ttl);
+  const ttl = cacheTtl(Number(data.expires_in));
+  // node-cache treats ttl 0 as "never expire", so an expired token is not cached.
+  if (ttl > 0) {
+    cache.set(key, data.access_token, ttl);
+  }
   return data.access_token;
+}
+
+// Expire 60 s early, or halfway for tokens that live less than two minutes.
+function cacheTtl(expiresIn) {
+  if (!Number.isFinite(expiresIn)) {
+    return DEFAULT_TTL_SECONDS - 60;
+  }
+  return Math.floor(expiresIn - Math.min(60, Math.ceil(expiresIn / 2)));
 }
 
 module.exports = getToken;
